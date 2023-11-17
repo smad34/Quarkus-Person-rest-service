@@ -1,9 +1,8 @@
 package de.indibit.controller;
 
+import de.indibit.config.MessageSource;
 import de.indibit.domain.Person;
-import de.indibit.entity.PersonEntity;
 import de.indibit.service.PersonService;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -24,6 +23,8 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 
 public class PersonController {
+    @Inject
+    MessageSource messageSource;
     private static final Logger LOGGER = Logger.getLogger(String.valueOf(PersonController.class));
 
     @Inject
@@ -38,16 +39,20 @@ public class PersonController {
                     mediaType = "application/json",
                     schema = @Schema(type = SchemaType.ARRAY)))
     public Response getPersons() {
-        PanacheQuery<Person> persons = personService.getPersons();
-        LOGGER.warning("Error searching LDAP.");
-        return null;
+       List<Person> persons = personService.getPersons();
+        return Response.ok(persons).build();
     }
 
     @GET
     @Path("/{id}")
     public Response getPersonById(@PathParam("id") Long id) {
         Person person = personService.findById(id);
-        return Response.ok(person).build();
+        if (person != null) {
+            return Response.ok(person).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(messageSource.getMessage("person.notfound", id.toString()))
+                .build();
     }
 
     @POST
@@ -63,15 +68,11 @@ public class PersonController {
     @Transactional
     public Response updatePerson(@PathParam("id") Long id, Person updatedPerson) {
         Person person = personService.findById(id);
-
-        if (person != null) {
-            person.setFirstName(updatedPerson.getFirstName());
-            person.setLastName(updatedPerson.getLastName());
-            person.setAge(updatedPerson.getAge());
-            personService.createOrUpdatePerson(person);
+        if (person != null) {;
+            updatedPerson.setId(id);
+            personService.createOrUpdatePerson(updatedPerson);
             return Response.ok().build();
         }
-
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
