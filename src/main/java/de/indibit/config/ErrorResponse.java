@@ -1,7 +1,6 @@
 package de.indibit.config;
 
 
-import de.indibit.domain.Person;
 import jakarta.json.bind.annotation.JsonbProperty;
 import lombok.Getter;
 import lombok.Setter;

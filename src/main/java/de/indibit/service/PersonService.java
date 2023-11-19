@@ -1,12 +1,12 @@
 package de.indibit.service;
 
-import de.indibit.domain.Person;
+import de.indibit.entity.CarEntity;
 import de.indibit.entity.PersonEntity;
+import de.indibit.repository.CarRepository;
 import de.indibit.repository.PersonRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <b>Title:</b> PersonService <br>
@@ -23,25 +23,29 @@ public class PersonService {
 
     @Inject
     PersonRepository repository;
-
-    public List<Person> getPersons() {
-        return repository.listAll().stream()
-                .map(PersonEntity::toDomain)
-                .collect(Collectors.toList());
+    @Inject
+    CarRepository carRepository;
+    public List<PersonEntity> getPersons() {
+        return repository.listAll();
     }
 
-    public boolean createOrUpdatePerson(Person person) {
-        PersonEntity mergedPerson = person.mergeDomain();
-        if (mergedPerson.getId() == null)
-            repository.persist(mergedPerson);
+    public boolean createOrUpdatePerson(PersonEntity person) {
+        PersonEntity person1  = person;
+        if (person.getId() == null)
+            repository.persist(person);
         else
-            repository.getEntityManager().merge(person.mergeDomain());
-        return repository.isPersistent(mergedPerson);
+            repository.getEntityManager().merge(person);
+        if(person.getCars()!=null){
+            for(CarEntity car: person.getCars()){
+                car.person = person;
+                carRepository.persist(car);
+            }
+        }
+        return repository.isPersistent(person);
     }
 
-    public Person findById(Long id) {
-        PersonEntity personEntity = repository.findById(id);
-        return personEntity != null ? personEntity.toDomain() : null;
+    public PersonEntity findById(Long id) {
+        return repository.findById(id);
     }
 
     public boolean remove(Long id) {

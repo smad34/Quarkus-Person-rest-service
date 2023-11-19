@@ -1,8 +1,8 @@
 package de.indibit.resource;
 
 import de.indibit.config.MessageSource;
-import de.indibit.domain.Person;
 import de.indibit.config.ErrorResponse;
+import de.indibit.entity.PersonEntity;
 import de.indibit.service.PersonService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -42,14 +42,14 @@ public class PersonResource {
      */
     @Operation(summary = "Get Persons from Database", description = "Retrieves a list of persons from the database.")
     @APIResponse(responseCode = "200", description = "Successful response", content = @Content(
-            mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = Person.class)))
+            mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = PersonEntity.class)))
     @APIResponse(responseCode = "500", description = "Internal Server Error",
             content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = ErrorResponse.class)))
     @GET
     public Multi<Response> getPersons() {
         return Multi.createFrom().item(() -> {
             try {
-                List<Person> persons = personService.getPersons();
+                List<PersonEntity> persons = personService.getPersons();
                 return Response.ok(persons).build();
             } catch (Exception e) {
                 ErrorResponse errorResponse = new ErrorResponse("500", "An internal server error occurred.");
@@ -69,7 +69,7 @@ public class PersonResource {
     @Path("/{id}")
     public Uni<Response> getPersonById(@PathParam("id") Long id) {
       return   Uni.createFrom().item(() -> {
-                    Person person = personService.findById(id);
+                    PersonEntity person = personService.findById(id);
                     if (person != null) {
                         return Response.ok(person).build();
                     }
@@ -87,7 +87,8 @@ public class PersonResource {
      */
     @POST
     @Transactional
-    public Response addPerson(Person person) {
+    public Response addPerson(PersonEntity person) {
+        PersonEntity person1 = person;
         if (personService.createOrUpdatePerson(person))
             return Response.created(URI.create("/persons/" + person.getId())).build();
         return Response.status(Response.Status.BAD_REQUEST).build();
@@ -102,10 +103,10 @@ public class PersonResource {
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response updatePerson(@PathParam("id") Long id, Person updatedPerson) {
-        Person person = personService.findById(id);
+    public Response updatePerson(@PathParam("id") Long id, PersonEntity updatedPerson) {
+        PersonEntity person = personService.findById(id);
         if (person != null) {
-            updatedPerson.setId(id);
+            updatedPerson.id = id;
             personService.createOrUpdatePerson(updatedPerson);
             return Response.ok(updatedPerson).build();
         }
