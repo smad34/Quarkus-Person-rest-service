@@ -1,5 +1,6 @@
 package de.indibit.entity;
 
+import io.quarkus.hibernate.orm.runtime.boot.xml.QNameSubstitution;
 import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -7,10 +8,10 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import java.util.List;
 
 /**
- * <b>Title:</b> PersonEntity <br>
+ * <b>Title:</b> Person <br>
  * <b>Copyright:</b> Copyright (c) 2023 <br>
  * <b>Company:</b> Indibit GmbH <br>
- * <b>Description:</b> Hibernate mapping of {@link PersonEntity}.<br>
+ * <b>Description:</b> Hibernate mapping of {@link Person}.<br>
  *
  * @author Mohammad
  * @version 1.0
@@ -19,7 +20,8 @@ import java.util.List;
 @Entity
 @Table(name = "person")
 @Setter
-public class PersonEntity {
+@Getter
+public class Person  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,28 +39,5 @@ public class PersonEntity {
     public int age;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<CarEntity> cars;
-
-    // Constructors, getters, setters...
-
-    // Ensure that getter methods are named according to JavaBean conventions
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public List<CarEntity> getCars() {
-        return cars;
-    }
+    public List<Car> cars;
 }

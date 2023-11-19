@@ -1,17 +1,14 @@
 package de.indibit.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * <b>Title:</b> PersonEntity <br>
+ * <b>Title:</b> Person <br>
  * <b>Copyright:</b> Copyright (c) 2023 <br>
  * <b>Company:</b> Indibit GmbH <br>
- * <b>Description:</b> Hibernate mapping of {@link CarEntity}.<br>
+ * <b>Description:</b> Hibernate mapping of {@link Car}.<br>
  *
  * @author Mohammad
  * @version 1.0
@@ -20,7 +17,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Entity
 @Table(name = "car")
 @Setter
-public class CarEntity {
+@Getter
+public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,20 +30,6 @@ public class CarEntity {
 
     @ManyToOne
     @JoinColumn(name = "person_id")
-    public PersonEntity person;
+    public Person person;
 
-    // Constructors, getters, setters...
-
-    // Ensure that getter methods are named according to JavaBean conventions
-    public Long getId() {
-        return id;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public PersonEntity getPerson() {
-        return person;
-    }
 }

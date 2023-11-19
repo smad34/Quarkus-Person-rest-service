@@ -1,7 +1,7 @@
 package de.indibit.service;
 
-import de.indibit.entity.CarEntity;
-import de.indibit.entity.PersonEntity;
+import de.indibit.entity.Car;
+import de.indibit.entity.Person;
 import de.indibit.repository.CarRepository;
 import de.indibit.repository.PersonRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,18 +25,22 @@ public class PersonService {
     PersonRepository repository;
     @Inject
     CarRepository carRepository;
-    public List<PersonEntity> getPersons() {
+
+    public List<Person> getPersons() {
         return repository.listAll();
     }
 
-    public boolean createOrUpdatePerson(PersonEntity person) {
-        PersonEntity person1  = person;
+    public List<Person> findAllWithCars() {
+        return repository.findAllWithCars();
+    }
+
+    public boolean createOrUpdatePerson(Person person) {
         if (person.getId() == null)
             repository.persist(person);
         else
             repository.getEntityManager().merge(person);
         if(person.getCars()!=null){
-            for(CarEntity car: person.getCars()){
+            for(Car car: person.getCars()){
                 car.person = person;
                 carRepository.persist(car);
             }
@@ -44,7 +48,7 @@ public class PersonService {
         return repository.isPersistent(person);
     }
 
-    public PersonEntity findById(Long id) {
+    public Person findById(Long id) {
         return repository.findById(id);
     }
 
