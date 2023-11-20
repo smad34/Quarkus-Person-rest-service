@@ -1,11 +1,15 @@
 package de.indibit.entity;
 
+import groovy.lang.Lazy;
 import io.quarkus.hibernate.orm.runtime.boot.xml.QNameSubstitution;
 import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <b>Title:</b> Person <br>
@@ -21,7 +25,7 @@ import java.util.List;
 @Table(name = "person")
 @Setter
 @Getter
-public class Person  {
+public class Person implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +33,9 @@ public class Person  {
     public Long id;
 
     @Column
-    @Schema(required = true, description = "First name of the person", example = "George")
+    @Schema(required = true,
+            description = "First name of the person",
+            example = "George")
     public String firstName;
 
     @Column
@@ -38,6 +44,10 @@ public class Person  {
     @Column
     public int age;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<Car> cars;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "person",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private Set<Car> cars = new HashSet<>();
 }

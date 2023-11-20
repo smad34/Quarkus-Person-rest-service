@@ -1,8 +1,12 @@
 package de.indibit.entity;
 
+import jakarta.json.bind.annotation.JsonbProperty;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import java.io.Serializable;
 
 /**
  * <b>Title:</b> Person <br>
@@ -18,17 +22,18 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Table(name = "car")
 @Setter
 @Getter
-public class Car {
+public class Car implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Schema(required = true, defaultValue = "0", description = "The id is mandatory")
-    private Long id;
+    public Long id;
 
     @Column
-    private String model;
+    public String model;
 
     @ManyToOne
+    @JsonbTransient
     @JoinColumn(name = "person_id")
     public Person person;
 

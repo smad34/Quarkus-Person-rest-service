@@ -62,13 +62,7 @@ public class PersonRepository implements PanacheRepository<Person> {
     }
 
 
-    @Transactional
     public List<Person> findAllWithCars() {
-        return listAll().stream()
-                .map(person -> {
-                    person.getCars().size(); // Force eager loading of cars
-                    return person;
-                })
-                .collect(Collectors.toList());
+        return findAll().stream().toList();
     }
 }

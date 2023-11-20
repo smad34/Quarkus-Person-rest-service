@@ -31,7 +31,8 @@ public class PersonService {
     }
 
     public List<Person> findAllWithCars() {
-        return repository.findAllWithCars();
+        List<Person> person = repository.listAll();
+        return person ;
     }
 
     public boolean createOrUpdatePerson(Person person) {
