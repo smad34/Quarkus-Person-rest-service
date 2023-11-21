@@ -7,54 +7,52 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 @TestProfile(MariaDbProfile.class)
 public class PersonRepositoryTest {
+
     @Inject
     PersonRepository personRepository;
 
-    @Test
-    @Transactional
-    void testFindPersonById() {
-        // Arrange
-        Person savedPerson = new Person();
-        savedPerson.setFirstName("John");
-        savedPerson.setLastName("Doe");
+    private Person savedPerson;
+
+    @BeforeEach
+    void setUp() {
+        savedPerson = new Person();
+        savedPerson.setFirstName("Andro");
+        savedPerson.setLastName("Jack");
         savedPerson.setAge(30);
-        personRepository.persist(savedPerson);
-
-        // Act
-        Person foundPerson = personRepository.findById(savedPerson.getId());
-
-        // Assert
-        assertEquals(savedPerson.getFirstName(), foundPerson.getFirstName());
-        assertEquals(savedPerson.getLastName(), foundPerson.getLastName());
-        assertEquals(savedPerson.getAge(), foundPerson.getAge());
     }
 
     @Test
     @Transactional
-    public void testFindByFirstName() {
-        // Arrange
-        Person savedPerson = new Person();
-        savedPerson.setFirstName("Alice");
-        savedPerson.setLastName("Wonderland");
-        savedPerson.setAge(25);
+    void shouldFindPersonById() {
         personRepository.persist(savedPerson);
 
-        // Act
-        Person foundPerson = personRepository.findByFirstName("Alice").orElse(null);
+        Person foundPerson = personRepository.findById(savedPerson.getId());
+        assertNotNull(foundPerson, "Person should not be null");
+        assertPersonEquals(savedPerson, foundPerson);
+    }
 
-        // Assert
-        assertTrue(foundPerson != null);
-        assert foundPerson != null;
-        assertEquals(savedPerson.getFirstName(), foundPerson.getFirstName());
-        assertEquals(savedPerson.getLastName(), foundPerson.getLastName());
-        assertEquals(savedPerson.getAge(), foundPerson.getAge());
+    @Test
+    @Transactional
+    void shouldFindByFirstName() {
+        personRepository.persist(savedPerson);
+
+        Person foundPerson = personRepository.findByFirstName("Andro").orElse(null);
+        assertNotNull(foundPerson, "Person should not be null");
+        assertPersonEquals(savedPerson, foundPerson);
+    }
+
+    private void assertPersonEquals(Person expected, Person actual) {
+        assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getLastName(), actual.getLastName());
+        assertEquals(expected.getAge(), actual.getAge());
     }
 }
