@@ -19,5 +19,4 @@ import jakarta.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class CarRepository implements PanacheRepository<Car> {
-
 }

@@ -61,8 +61,4 @@ public class PersonRepository implements PanacheRepository<Person> {
 
     }
 
-
-    public List<Person> findAllWithCars() {
-        return findAll().stream().toList();
-    }
 }

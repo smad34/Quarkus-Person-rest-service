@@ -3,7 +3,7 @@ package de.indibit.resource;
 import de.indibit.config.MessageSource;
 import de.indibit.config.ErrorResponse;
 import de.indibit.entity.Person;
-import de.indibit.service.PersonService;
+import de.indibit.service.LocalService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -31,7 +31,7 @@ public class PersonResource {
     static final String Person_API = "/persons";
 
     @Inject
-    PersonService personService;
+    LocalService localService;
     @Inject
     MessageSource messageSource;
 
@@ -49,7 +49,7 @@ public class PersonResource {
     public Multi<Response> getPersons() {
         return Multi.createFrom().item(() -> {
             try {
-                List<Person> persons = personService.findAllWithCars();
+                List<Person> persons = localService.findAllWithCars();
                 return Response.ok(persons).build();
             } catch (Exception e) {
                 ErrorResponse errorResponse = new ErrorResponse("500", "An internal server error occurred.");
@@ -69,7 +69,7 @@ public class PersonResource {
     @Path("/{id}")
     public Uni<Response> getPersonById(@PathParam("id") Long id) {
       return   Uni.createFrom().item(() -> {
-                    Person person = personService.findById(id);
+                    Person person = localService.findById(id);
                     if (person != null) {
                         return Response.ok(person).build();
                     }
@@ -88,7 +88,7 @@ public class PersonResource {
     @POST
     @Transactional
     public Response addPerson(Person person) {
-        if (personService.createOrUpdatePerson(person))
+        if (localService.createOrUpdatePerson(person))
             return Response.created(URI.create("/persons/" + person.getId())).build();
         return Response.status(Response.Status.BAD_REQUEST).build();
     }
@@ -103,10 +103,10 @@ public class PersonResource {
     @Path("/{id}")
     @Transactional
     public Response updatePerson(@PathParam("id") Long id, Person updatedPerson) {
-        Person person = personService.findById(id);
+        Person person = localService.findById(id);
         if (person != null) {
             updatedPerson.id = id;
-            personService.createOrUpdatePerson(updatedPerson);
+            localService.createOrUpdatePerson(updatedPerson);
             return Response.ok(updatedPerson).build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
@@ -122,7 +122,7 @@ public class PersonResource {
     @DELETE
     @Transactional
     public Response deletePerson(@PathParam("id") Long id) {
-        if (personService.remove(id)) {
+        if (localService.remove(id)) {
             return Response.ok(Response.Status.ACCEPTED).build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
@@ -138,7 +138,7 @@ public class PersonResource {
     @DELETE
     @Transactional
     public Response deletePersonByFirstName(@PathParam("firstName") String firstName) {
-        if (personService.deleteByName(firstName)) {
+        if (localService.deleteByName(firstName)) {
             return Response.noContent().build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
