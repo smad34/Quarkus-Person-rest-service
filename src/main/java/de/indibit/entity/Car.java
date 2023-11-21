@@ -36,5 +36,4 @@ public class Car implements Serializable {
     @JsonbTransient
     @JoinColumn(name = "person_id")
     public Person person;
-
 }

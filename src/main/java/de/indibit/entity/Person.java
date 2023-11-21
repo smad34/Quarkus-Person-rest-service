@@ -45,7 +45,6 @@ public class Person implements Serializable {
     @Column
     public int age;
 
-
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "person",
             cascade = CascadeType.ALL,
