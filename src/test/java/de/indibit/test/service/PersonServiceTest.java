@@ -1,8 +1,9 @@
-package de.indibit.service;
+package de.indibit.test.service;
 import de.indibit.entity.Car;
 import de.indibit.entity.Person;
 import de.indibit.repository.CarRepository;
 import de.indibit.repository.PersonRepository;
+import de.indibit.service.LocalService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

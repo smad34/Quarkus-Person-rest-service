@@ -1,7 +1,8 @@
-package de.indibit.repository;
+package de.indibit.test.repository;
 
 import de.indibit.MariaDbProfile;
 import de.indibit.entity.Person;
+import de.indibit.repository.PersonRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;

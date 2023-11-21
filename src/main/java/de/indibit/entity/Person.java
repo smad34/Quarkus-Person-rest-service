@@ -25,6 +25,7 @@ import java.util.Set;
 @Table(name = "person")
 @Setter
 @Getter
+@NoArgsConstructor
 public class Person implements Serializable {
 
     @Id
