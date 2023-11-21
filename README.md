@@ -1,68 +1,37 @@
-# person_register
+# Quarkus Person API
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project is a Quarkus-based RESTful API for managing persons. It provides basic CRUD operations for interacting with a database of persons. Below, you'll find information on how to set up, use, and contribute to this project.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Table of Contents
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+  - [Get Persons](#get-persons)
+  - [Get Person by ID](#get-person-by-id)
+  - [Add Person](#add-person)
+  - [Update Person](#update-person)
+  - [Delete Person](#delete-person)
+  - [Delete Person by FirstName](#delete-person-by-firstname)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-## Running the application in dev mode
+## Getting Started
 
-You can run your application in dev mode that enables live coding using:
+### Prerequisites
+- [Java Development Kit (JDK)](https://adoptium.net/)
+- [Apache Maven](https://maven.apache.org/)
+  
+## Contact:
 
-```shell script
-./mvnw compile quarkus:dev
-```
+Mohammad Abd
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+Email: smad34@gmail.com
 
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
-```
-
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/person_register-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- JDBC Driver - MariaDB ([guide](https://quarkus.io/guides/datasource)): Connect to the MariaDB database via JDBC
-- Agroal - Database connection pool ([guide](https://quarkus.io/guides/datasource)): Pool JDBC database connections (
-  included in Hibernate ORM)
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/your-project.git
+   cd your-project
